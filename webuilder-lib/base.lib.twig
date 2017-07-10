@@ -1,0 +1,10 @@
+{#- Build final email with the base constructor and params -#}
+{%- import 'webuilder.lib.twig' as b -%}
+
+{{
+    b.mainPage({
+        'title': 'Twig webBuilder test',
+        'bodyId': 'b1',
+        'bodyContent': '<h1>:D</h1>'
+    })
+}}

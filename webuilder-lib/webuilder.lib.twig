@@ -1,0 +1,64 @@
+{#- Join a list of output result into one final output -#}
+{%- macro addOut(outList) -%}
+    {%- import _self as this -%}
+    {%- for result in outList -%}{{result}}{%- endfor -%}
+{%- endmacro -%}
+
+{#- base page -#}
+{%- macro mainPage(opts) -%}
+{%- import _self as this -%}
+{%- set opts = utilExtension_prefillValues(opts,
+    [
+        'html_params','base_url','title','favicon_url', 'bodyContent', 'bodyParams','bodyStyle','bodyClasses'
+    ],{
+        'base_url': '/',
+        'title': 'DEFAULT_TITLE',
+        'favicon_url': 'favicon.ico',
+        'bodyContent' : 'abc',
+        'bodyParams': '',
+        'bodyId': '',
+        'bodyStyle': '',
+        'bodyClasses':''
+    }) -%}
+<!DOCTYPE html>
+<html {% block html_params %}{{opts.html_params}}{% endblock %}>
+    <head>
+        <base href="{%block base_url%}{{opts.base_url}}{%endblock%}">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{{opts.title}}{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{opts.favicon_url}}" />        
+    </head>
+    {{
+        this.body({
+            content: opts.bodyContent,
+            style: opts.bodyStyle,
+            classes: opts.bodyClasses,
+            id: opts.bodyId
+        })
+    }}
+    {% block body_javascripts %}{% endblock %}
+    </body>
+</html>
+{%- endmacro -%}
+
+{#- Body macro -#}
+{%- macro body(opts) -%}
+    {%- import _self as this -%}
+    {%- set opts = utilExtension_prefillValues(opts,
+    [
+        'content','style','id','classes','params'
+    ],{
+
+        'id': 'body',
+        'style': '',
+        'classes': '',
+        'params': '',
+        'content': ''
+    }) -%}
+    <body {{opts.params}} {%if opts.classes%}class='{{opts.classes}}'{%endif%} {%if opts.id%}id='{{opts.id}}'{%endif%} {%if opts.style%}style='{{opts.style}}'{%endif%}>
+        {{opts.content}}
+    </body>
+{%- endmacro -%}
